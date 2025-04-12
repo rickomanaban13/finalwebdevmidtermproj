@@ -27,7 +27,7 @@ body, html {
   background-color: #0d0e0e;
   color: white;
   text-align: center;
-  padding: 30px 0;
+  padding: 0.2px 0;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -57,19 +57,63 @@ body, html {
 }
 
 /* Main Content */
-/* Main Content */
+/* Default styles for main-content */
 .main-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 20px;
-  text-align: center;
-  min-height: calc(100vh - 100px); /* Ensures content fills the space between header and footer */
-  margin-top: 60px; /* Adjust for header height */
-  margin-bottom: 40px; /* Adjust for footer height */
-  margin-left: 100px;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Adjust layout for smaller screens */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+  }
+
+  .search-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* Default margin */
+    transition: margin-top 0.3s ease; /* Smooth transition */
+  }
+  
+  /* Adjust for smaller screens */
+  @media (max-width: 480px) {
+    .search-wrapper {
+      margin-top: 100px; /* Move it further down for better visibility */
+    }
+  }
+
+  .filter-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .results-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 5px;
+  }
+
+  .country-card {
+    font-size: 14px;
+  }
+
+  .country-flag {
+    width: 100%;
+    height: auto;
+  }
 }
 
 /* Search Wrapper */

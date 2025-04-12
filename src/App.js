@@ -46,7 +46,7 @@ const filteredCountries = countries.filter((country) => {
   return (
     <div className="App">
       <header className="fixed-header">
-        <h1>Country Explorer</h1>
+        <h1>Country The Explorer</h1>
       </header>
 
       <main className="main-content">
@@ -135,7 +135,7 @@ const filteredCountries = countries.filter((country) => {
       </main>
 
       <footer className="fixed-footer">
-        <p>&copy; 2025 Country Explorer by RICO JAY GWAPO, All rights reserved.</p>
+        <p>&copy; 2025 Country The Explorer by RICO JAY GWAPO, All rights reserved.</p>
       </footer>
     </div>
   );

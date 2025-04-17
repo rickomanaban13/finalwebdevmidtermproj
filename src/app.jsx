@@ -42,34 +42,23 @@ function App() {
     return true;
   };
 
-  const uniqueCountries = Array.from(new Map(countries.map((c) => [c.name, c])).values());
-
-  const filteredCountries = uniqueCountries.filter((country) => {
-    const search = searchTerm.toLowerCase();
-
-    const matchesSearch =
-      country.name.toLowerCase().includes(search) ||
-      (country.region && country.region.toLowerCase().includes(search)) ||
-      (country.subregion && country.subregion.toLowerCase().includes(search));
-
-    const matchesRegion = selectedRegion ? country.region === selectedRegion : true;
-    const matchesPopulation = filterByPopulation(country);
-
-    if (selectedRegion) {
-      return matchesSearch && matchesRegion && matchesPopulation;
-    }
-
-    return matchesSearch && matchesPopulation;
+  const filteredCountries = countries.filter((country) => {
+    return (
+      country.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedRegion ? country.region === selectedRegion : true) &&
+      filterByPopulation(country)
+    );
   });
 
   const isActiveSearch = searchTerm || selectedRegion || populationFilter;
 
   return (
     <div className="App">
-      <Header />
+      <Header /> {/* Add the Header component */}
       <div className={`search-wrapper ${isActiveSearch ? 'search-top' : 'search-center'}`}>
         <div>
           <label htmlFor="search" className="search-label">SEARCH FOR ANY COUNTRY</label>
+          <p className="credit-text">BY ALFONZ PEREZ</p>
         </div>
 
         <input
@@ -83,7 +72,7 @@ function App() {
 
         <div className="filter-wrapper">
           <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
-            <option value="">Select Regions</option>
+            <option value="">All Regions</option>
             <option value="Africa">Africa</option>
             <option value="Americas">Americas</option>
             <option value="Asia">Asia</option>
@@ -108,7 +97,7 @@ function App() {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div className="results-container">
-        {!loading && !error && filteredCountries.map((country) => (
+        {!loading && !error && isActiveSearch && filteredCountries.map((country) => (
           <div key={country.name} className="country-card">
             <div className="country-flag-container">
               {country.flag && (
@@ -120,37 +109,32 @@ function App() {
               )}
             </div>
             <div className="country-info">
-              <p><strong>Name:</strong> {country.name}</p>
-              <p><strong>Capital:</strong> {country.capital || 'N/A'}</p>
-              <p><strong>Region:</strong> {country.region || 'N/A'}</p>
-              <p><strong>Subregion:</strong> {country.subregion || 'N/A'}</p>
-              <p><strong>Population:</strong> {country.population.toLocaleString() || 'N/A'}</p>
-              <p><strong>Area:</strong> {country.area ? `${country.area.toLocaleString()} km²` : 'N/A'}</p>
-              {country.coordinates && (
-                <p><strong>Coordinates:</strong> {`Lat: ${country.coordinates.latitude}, Long: ${country.coordinates.longitude}`}</p>
-              )}
-              {country.borders && country.borders.length > 0 && (
-                <p><strong>Borders:</strong> {country.borders.join(', ')}</p>
-              )}
-              {country.timezones && (
-                <p><strong>Timezones:</strong> {country.timezones.join(', ')}</p>
-              )}
-              {country.currency && (
-                <p><strong>Currency:</strong> {country.currency}</p>
-              )}
-              {country.languages && country.languages.length > 0 && (
-                <p><strong>Languages:</strong> {country.languages.join(', ')}</p>
-              )}
+              <pre>{JSON.stringify({
+                name: country.name,
+                capital: country.capital || 'N/A',
+                region: country.region || 'N/A',
+                subregion: country.subregion || 'N/A',
+                population: country.population || 'N/A',
+                area: country.area || 'N/A',
+                coordinates: country.latlng ? {
+                  latitude: country.latlng[0],
+                  longitude: country.latlng[1]
+                } : 'N/A',
+                borders: country.borders || [],
+                timezones: country.timezones || [],
+                currency: country.currencies ? `${country.currencies[0].name} (${country.currencies[0].code})` : 'N/A',
+                languages: country.languages ? country.languages.map(l => l.name) : [],
+                flag: country.flag || 'N/A'
+              }, null, 2)}</pre>
             </div>
           </div>
         ))}
 
-        {!loading && !error && filteredCountries.length === 0 && (
+        {!loading && !error && isActiveSearch && filteredCountries.length === 0 && (
           <p className="no-result">No country found.</p>
         )}
       </div>
-
-      <Footer />
+      <Footer /> {/* Add the Footer component */}
     </div>
   );
 }
